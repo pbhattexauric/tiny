@@ -1,0 +1,95 @@
+<html>
+<link rel=StyleSheet href="jquery-simplefolders/main.css" type="text/css" media=screen>
+<head>
+<script type="text/javascript" src="jquery-min.js"></script>
+<script src="jquery-simplefolders/main.js"></script>
+</head>
+
+<body>
+<ul class=tree id="input">
+</ul>
+</body>
+
+</html>
+<script>
+
+var args = top.tinymce.activeEditor.windowManager.getParams();
+//alert(args.arg1);
+$('.tree').html(args.arg1);
+//$('.tree > ul > li').on('click', function(){
+$(document).on("click",' ul.tree li',function(){											
+var node=top.tinyMCE.activeEditor.dom.select('p.rdmparadesc')
+top.tinyMCE.activeEditor.selection.select(node[$(this).attr('data-src')]);
+
+var parentWin = (!window.frameElement && window.dialogArguments) || opener || parent || top;
+    // in case you use a modal dialog
+   // tinymce.activeEditor.selection.setContent(image_url);
+parentWin.tinyMCE.activeEditor.windowManager.open({
+								title: 'Add Paragraph',
+								body: [{type: 'textbox', name: 'title', label: 'text'},{type: 'textbox', name: 'content', label: 'content'}],
+								onsubmit: function(e) {
+									// Adds a new paragraph to the end of the active editor
+									//var content = parentWin.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+								//	alert(content);
+									//content = content+'<p class="rdmpara" title="my title">'+e.data.title+'</p>';
+									//content = content+'<p class="rdmpara" title="my title"><label>'+e.data.title+'</label></p><p class="rdmparadesc">'+e.data.content+'</p>';
+										var nodedesc = new Array();
+								/*	nodedesc=parentWin.tinyMCE.activeEditor.dom.select('p.rdmparadesc');
+	
+									parentWin.tinyMCE.activeEditor.selection.select(nodedesc[$(this).attr('data-src')]);*/
+									var content = parentWin.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+									content = content+'<p class="rdmpara" title="my title"><strong><label>'+e.data.title+'</label></strong></p><p class="rdmparadesc">'+e.data.content+'</p>';							//alert(content);return false;
+									parentWin.tinyMCE.activeEditor.selection.setContent(content);
+									var node2select = new Array();
+
+									var optionTexts = [];
+									node2select = parentWin.tinyMCE.activeEditor.dom.select('p.rdmpara label'); 
+									var str='';
+									var datahtml = '';
+						
+									for(var i=0;i<node2select.length;i++)
+									{
+										parentWin.tinyMCE.activeEditor.selection.select(node2select[i]);
+							
+										var content = parentWin.tinyMCE.activeEditor.selection.getContent({ 'format' : 'text' });
+								
+										//alert(content);
+										optionTexts.push(content);
+										//alert(tinyMCE.activeEditor.selection.getContent());
+										str = str+"{type:'textbox',name:'title',label:'"+content+"'},";
+										if(content == '')
+										{
+												/*var html = new Array();
+												html = tinyMCE.activeEditor.dom.select('div.hidepara');
+												for(;j<html.length;)
+												{
+													tinyMCE.activeEditor.selection.select(html[j]);
+											
+													var selectionFromTinyMCE =  tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+												
+													
+													console.log($(selectionFromTinyMCE).text());
+													datahtml = datahtml+'<li data-src="'+i+'">'+$(selectionFromTinyMCE).text()+'</li>';
+													j++;
+													break;
+												}*/
+												continue;
+										}
+										else
+										{
+											datahtml = datahtml+'<li data-src="'+i+'">'+content+'</li>';
+										}
+									}
+									//alert(datahtml);
+									$('.tree').html(datahtml);
+									//top.tinyMCE.activeEditor.windowManager.close();
+									//top.tinymce.close();
+									//alert(top.tinymce.activeEditor.selection.setContent(content));
+									//tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(), 'p',{title : 'my title',class:'rdmpara'}, e.data.title);
+								}
+							});
+			
+ 
+   
+});
+</script>

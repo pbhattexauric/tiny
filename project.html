@@ -1,0 +1,504 @@
+<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="jquery-min.js"></script>
+
+<script type="text/javascript">
+
+tinymce.init({
+
+		selector: "#areaContent",
+
+		theme: "modern",
+
+		theme_advanced_disable : "advlink",
+
+
+		plugins: [
+
+			"advlist autolink lists link image charmap print preview hr anchor pagebreak",
+
+			"searchreplace wordcount visualblocks visualchars code fullscreen",
+
+			"insertdatetime media nonbreaking save table  directionality",
+
+			"emoticons template paste textcolor hr","showhideparagraph","close","exit","deletetext","createnewparagraph","inlcudeexcludeparagraph"
+
+		],
+
+		height : 700,
+		
+		object_resizing : false,
+
+		content_css: "http://dailytipsforcash.com/masterwill/formwill/css/default.css",
+
+		toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent ",
+
+		toolbar2: "fontselect |  fontsizeselect | bold italic underline forecolor | superscript subscript |",
+
+		toolbar3: "paragraph | spacing | beforeparagraphspacing | afterparagraphspacing | case | deletetext  print preview | forecolor emoticons|  hr",
+		
+
+		image_advtab: true,
+
+		contextmenu: "undo redo removeformat | cut copy paste deletetable | selectall  | link image  | ",
+
+		valid_children:  "+span[p|label|div]",
+
+		extended_valid_elements : "div[onclick|class|style|align|id],label[onclick|id|name|class|style|align],span[style|onclick|id|name|class|oncontextmenu|align],script[charset|defer|language|src|type]",
+		
+		external_plugins: { "nanospell": "../../nanospell/plugin.js" },
+ 		
+		nanospell_server:"php",
+
+		setup : function(ed) {
+
+					ed.on("init", function() {
+
+						var doc = ed.contentDocument;
+
+						var jQueryScript = doc.createElement( 'script' );
+
+						jQueryScript.src = "http://dailytipsforcash.com/masterwill/formwill/js/jquery-1.10.2.min.js";
+
+						jQueryScript.type = 'text/javascript';			
+
+						doc.getElementsByTagName( 'head' )[0].appendChild( jQueryScript ); 
+
+							
+
+						var script = doc.createElement( 'script' );
+
+						script.src = "http://dailytipsforcash.com/masterwill/formwill/js/main.js";
+
+						script.type = 'text/javascript';			
+
+						doc.getElementsByTagName( 'head' )[0].appendChild( script ); 			  
+
+					})
+
+					ed.addButton('paragraph', {
+						text: 'Add Paragraph',
+						icon: false,
+						onclick: function() {
+							// Open window
+							ed.windowManager.open({
+								title: 'Add Paragraph',
+								body: [{type: 'textbox', name: 'title', label: 'text'},{type: 'textbox', name: 'content', label: 'content'}],
+								onsubmit: function(e) {
+									// Adds a new paragraph to the end of the active editor
+									tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(), 'p',{title : 'my title',class:'rdmpara'}, '<label><strong>'+e.data.title+'</strong></label><br/><p class="rdmparadesc">'+e.data.content+'</p>');
+								}
+							});
+			
+						}
+						
+					});
+
+					ed.addButton('spacing', {
+						type: 'listbox',
+						text: 'Line Spacing',
+						icon: false,
+						onselect: function(e) {
+								//ed.insertContent(this.value());
+								tinyMCE.activeEditor.dom.setStyle(tinyMCE.activeEditor.dom.select('p'), 'line-height',  this.value()+'em');
+								// tinymce.activeEditor.dom.setStyle(tinymce.activeEditor.dom.select('p'), 'background-color', 'red');
+							},
+						values: [
+							{text: '1pt', value: '1'},
+							{text: '1.5pt', value: '1.5'},
+							{text: '2pt', value: '2'},
+							{text: '2.5pt', value: '2.5'},
+							{text: '3pt', value: '3'}
+						]/*,
+						onPostRender: function() {
+							// Select the second item by default
+							this.value('Some text 2');
+						}*/
+					});
+					
+					ed.addButton('beforeparagraphspacing', {
+						type: 'listbox',
+						text: 'Before paragraph Spacing',
+						icon: false,
+						onselect: function(e) {
+								//ed.insertContent(this.value());
+								//tinyMCE.activeEditor.dom.setStyle(tinyMCE.activeEditor.dom.select(tinyMCE.activeEditor.selection.select('p')), 'padding-top',  this.value()+'em');
+							 var html = '<p style="line-height:'+this.value()+'em">&nbsp;</p>'+tinyMCE.activeEditor.selection.getContent();
+							 tinyMCE.activeEditor.selection.setContent(html);
+							 //tinymce.activeEditor.dom.setStyle(tinyMCE.activeEditor.selection.select(tinymce.activeEditor.selection.getNode()), 'padding-top', this.value()+'px');
+							  	//var wrapped = $("<div>" + tinyMCE.activeEditor.selection.getContent() + "</div>");
+   								//wrapped.find('label').remove();
+								//wrapped.find('span').remove();
+    							//alert(wrapped.html());
+						
+							},
+						values: [
+							{text: '1pt', value: '1'},
+							{text: '2pt', value: '2'},
+							{text: '3pt', value: '3'},
+							{text: '4pt', value: '4'},
+							{text: '5pt', value: '5'}
+						]/*,
+						onPostRender: function() {
+							// Select the second item by default
+							this.value('Some text 2');
+						}*/
+					});
+					
+					ed.addButton('afterparagraphspacing', {
+						type: 'listbox',
+						text: 'After paragraph Spacing',
+						icon: false,
+						onselect: function(e) {
+								 //tinymce.activeEditor.dom.setStyle(tinyMCE.activeEditor.selection.select(tinymce.activeEditor.selection.getNode()), 'padding-bottom', this.value()+'px');
+								var html = tinyMCE.activeEditor.selection.getContent()+'<p style="line-height:'+this.value()+'em">&nbsp;</p>';
+							 	tinyMCE.activeEditor.selection.setContent(html);
+							},
+							values: [
+							{text: '1pt', value: '1'},
+							{text: '2pt', value: '2'},
+							{text: '3pt', value: '3'},
+							{text: '4pt', value: '4'},
+							{text: '5pt', value: '5'}
+						]/*,
+						onPostRender: function() {
+							// Select the second item by default
+							this.value('Some text 2');
+						}*/
+					});
+					
+					
+					ed.addButton('case', {
+						type: 'listbox',
+						text: 'Change case',
+						icon: false,
+						onselect: function(e) {
+								//ed.insertContent(this.value());
+								var content = tinyMCE.activeEditor.selection.getContent({ 'format' : 'text' });
+							
+								if(this.value() == 'lower')
+								{
+									content = content.toLowerCase();
+								}
+								else
+								{
+									content = content.toUpperCase();
+								}
+								 tinyMCE.activeEditor.selection.setContent(content);
+								//tinyMCE.activeEditor.dom.setStyle(tinymce.activeEditor.dom.select('p'), 'text-transform',  this.value()+'case');
+								// tinymce.activeEditor.dom.setStyle(tinymce.activeEditor.dom.select('p'), 'background-color', 'red');
+							},
+						values: [
+							{text: 'Upper case', value: 'upper'},
+							{text: 'Lower case', value: 'lower'},
+						]/*,
+						onPostRender: function() {
+							// Select the second item by default
+							this.value('Some text 2');
+						}*/
+					});
+					
+					
+					/*  ed.on('keydown', function(event) {
+							if (event.keyCode == 9) { // tab pressed
+							  if (event.shiftKey) {
+								ed.execCommand('Outdent');
+							  }
+							  else {
+								ed.execCommand('Indent');
+							  }
+					
+							  event.preventDefault();
+							  return false;
+							}
+    				});*/
+					 ed.on('keydown',function(evt) {
+							  if (evt.keyCode == 9){
+								ed.execCommand('mceInsertContent', false, '&emsp;&emsp;');
+								evt.preventDefault();
+							  }
+     				});
+
+				}
+
+	});
+	tinymce.PluginManager.add('showhideparagraph', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('showhideparagraph', {
+			text: 'Show Hide Paragraph',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+					var elem='p';	
+					var ed = tinymce.activeEditor;
+					var e = ed.getDoc().getElementsByTagName(elem);
+					var n = e.length;
+					for (var i=0; i<n; i++) {
+						e[i].style.border = ((e[i].style.border == '1px dotted rgb(153, 153, 153)') ? '1px dotted transparent' : '1px dotted rgb(153, 153, 153)');
+					}
+					//	return;
+				}
+			});
+	});
+	tinymce.PluginManager.add('close', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('close', {
+			text: 'Close',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+			//	tinyMCE.activeEditor.dom.remove(tinyMCE.activeEditor.selection.getContent( { 'format' : 'text' } ));
+				tinyMCE.activeEditor.setContent('');
+			}
+		});
+	});
+	
+	
+	tinymce.PluginManager.add('exit', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('exit', {
+			text: 'Exit',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+				tinyMCE.activeEditor.setContent('');
+				location.reload();
+			}
+		});
+	});
+	
+	
+	tinymce.PluginManager.add('deletetext', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('deletetext', {
+			text: 'Delete text',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+			//	tinyMCE.activeEditor.dom.remove(tinyMCE.activeEditor.selection.getContent( { 'format' : 'text' } ));
+				tinyMCE.activeEditor.selection.setContent('');
+			}
+		});
+	});
+	
+	tinymce.PluginManager.add('createnewparagraph', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('createnewparagraph', {
+			text: 'Create new paragraph',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+			//	tinyMCE.activeEditor.dom.remove(tinyMCE.activeEditor.selection.getContent( { 'format' : 'text' } ));
+			//	tinyMCE.activeEditor.selection.setContent('');
+			//var arr = $(".rdmpara").map(function() { return $(this).text() }).get();
+			//alert(arr);
+			var node2select = new Array();
+
+			var optionTexts = [];
+			node2select = tinyMCE.activeEditor.dom.select('p.rdmpara label'); 
+			var str='';
+			var datahtml = '';
+
+			var j=0;
+			for(var i=0;i<node2select.length;i++)
+			{
+				tinyMCE.activeEditor.selection.select(node2select[i]);
+	
+				var content = tinyMCE.activeEditor.selection.getContent({ 'format' : 'text' });
+		
+				//alert(content);
+				optionTexts.push(content);
+				//alert(tinyMCE.activeEditor.selection.getContent());
+				str = str+"{type:'textbox',name:'title',label:'"+content+"'},";
+				
+					if(content == '')
+				{
+						/*var html = new Array();
+						html = tinyMCE.activeEditor.dom.select('div.hidepara');
+						for(;j<html.length;)
+						{
+							tinyMCE.activeEditor.selection.select(html[j]);
+					
+							var selectionFromTinyMCE =  tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+						
+							
+							console.log($(selectionFromTinyMCE).text());
+							datahtml = datahtml+'<li data-src="'+i+'">'+$(selectionFromTinyMCE).text()+'</li>';
+							j++;
+							break;
+						}*/
+						continue;
+				}
+				else
+				{
+						datahtml = datahtml+'<li data-src="'+i+'">'+content+'</li>';	
+				}
+				
+				//datahtml = datahtml+'<li data-src="'+i+'">'+content+'</li>';
+			}
+			str = str.substring(0,str.length - 1);
+			//var quotedCSV = '"' + optionTexts.join('", "') + '"';
+			str = $.trim(str);
+		
+			//alert(str);
+			str = "["+str+"]";
+		/*	editor.windowManager.open({
+								title: 'Add Paragraph',
+								body:[{type:'textbox',name:'title',label:'ddddd'},{type:'textbox',name:'title',label:'ffffff'}],
+						
+								onsubmit: function(e) {
+									tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(), 'p',{title : 'my title'}, e.data.title);
+								}
+							});*/
+			editor.windowManager.open({
+					title: 'Select Paragraph',
+					url: 'createparagraphtemplate.html',
+					width: 400,
+					height: 300,
+					
+					buttons: [{
+						text: 'Close',
+						onclick: 'close',
+					}],	
+				},
+				{
+					arg1: datahtml
+				});
+			}
+		});
+	});
+	
+	
+	tinymce.PluginManager.add('inlcudeexcludeparagraph', function(editor, url) {
+		// Adds a menu item to the tools menu
+		editor.addMenuItem('inlcudeexcludeparagraph', {
+			text: 'Include/Exclude paragraph',
+			context: 'tools',
+			icon: true,
+			onclick: function() {
+			//	tinyMCE.activeEditor.dom.remove(tinyMCE.activeEditor.selection.getContent( { 'format' : 'text' } ));
+			//	tinyMCE.activeEditor.selection.setContent('');
+			//var arr = $(".rdmpara").map(function() { return $(this).text() }).get();
+			//alert(arr);
+			
+		
+					
+		/*	if(html.length == 0)
+			{
+				var el = tinyMCE.activeEditor.dom.create('div', {id : 'test', 'class' : 'hidepara','style':'display:none'}, '');
+				tinyMCE.activeEditor.selection.setNode(el);
+			}
+*/
+		/*	if(html.length != 0)
+			{
+				tinymce.activeEditor.dom.setStyle(tinyMCE.activeEditor.selection.select('div.hidepara'), 'display', 'block');
+			}*/
+			
+			var node2select = new Array();
+
+			var optionTexts = [];
+			node2select = tinyMCE.activeEditor.dom.select('p.rdmpara label'); 
+			var str='';
+			var datahtml = '';
+			var j=0
+			for(var i=0;i<node2select.length;i++)
+			{
+				tinyMCE.activeEditor.selection.select(node2select[i]);
+	
+				var content = tinyMCE.activeEditor.selection.getContent({ 'format' : 'text' });
+		
+				//alert(content);
+				optionTexts.push(content);
+				//alert(tinyMCE.activeEditor.selection.getContent());
+				str = str+"{type:'textbox',name:'title',label:'"+content+"'},";
+				if(content == '')
+				{
+						var html = new Array();
+						html = tinyMCE.activeEditor.dom.select('div.hidepara label');
+						for(;j<html.length;)
+						{
+							tinyMCE.activeEditor.selection.select(html[j]);
+							// This value of var selectionFromTinyMCE is an example
+							// of what parent.tinyMCE.activeEditor.selection.getContent(); returns to you
+							var selectionFromTinyMCE =  tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+							//alert(selectionFromTinyMCE);
+							
+							console.log($(selectionFromTinyMCE).text());
+							datahtml = datahtml+'<input type="checkbox" attr-id="'+i+'" name="paralist[]">'+$(selectionFromTinyMCE).text()+"<br/>";
+							j++;
+							break;
+						}
+				}
+				else
+				{
+						datahtml = datahtml+'<input type="checkbox" attr-id="'+i+'" checked="checked" name="paralist[]">'+content+"<br/>";	
+				}
+				
+			}
+
+		
+		
+		
+			
+			
+			//datahtml = datahtml+"<div class='hidepara'></div>";
+		/*	if(html.length != 0)
+			{
+				tinymce.activeEditor.dom.setStyle(tinyMCE.activeEditor.selection.select('div.hidepara'), 'display', 'none');
+			}*/
+			
+			editor.windowManager.open({
+					title: 'Select Paragraph',
+					url: 'includeexcludeparagraphtemplate.html',
+					width: 400,
+					height: 300,
+					
+					buttons: [{
+						text: 'Close',
+						onclick: 'close',
+					}/*,{text:'submit',onclick:function(e) {
+						alert('hi');
+						
+						}}*/],	
+				},
+				{
+					arg1: datahtml
+				});
+			}
+		});
+	});
+	function saveDoc(type) {
+    tinyMCE.triggerSave();
+    contentToSavedoc = tinyMCE.activeEditor.getContent();
+  
+    
+	/*	$.ajax({
+			type: 'POST',
+			url: 'html_to_doc_example.php',
+			data: {
+				type: 'doc',
+				contentToSave: contentToSavedoc
+			},
+			success: function (data, textStatus, jqXHR) {
+			
+				//$(".download").html("<a href='"+data+"' target='_blank'>Download it!</a>");
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+			}
+		});*/
+		$('#Type').val(type);
+		$('#contentToSave').val(contentToSavedoc);
+		document.form.submit();
+	}
+</script>
+   <textarea id="areaContent">
+
+                                
+		                    </textarea>
+                            <form method="post" action="html_to_doc_example.php" name="form">
+                            <input type="hidden" name="contentToSave" id="contentToSave" />
+                               <input type="hidden" name="Type" id="Type" />
+                            <input type="button" id="btnSavepdf" value="Save as doc" onClick="saveDoc('doc')" />
+                             <input type="button" id="btnSavertf" value="Save as RTF" onClick="saveDoc('rtf')" />
+                            </form>
+                            
+                          

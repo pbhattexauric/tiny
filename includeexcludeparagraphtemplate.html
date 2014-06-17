@@ -1,0 +1,106 @@
+<html>
+<link rel=StyleSheet href="jquery-simplefolders/main.css" type="text/css" media=screen>
+<head>
+<script type="text/javascript" src="jquery-min.js"></script>
+<!--<script src="jquery-simplefolders/main.js"></script>-->
+</head>
+
+<body>
+<div class=trees id="input">
+</div>
+</body>
+
+</html>
+<script>
+var args = top.tinymce.activeEditor.windowManager.getParams();
+$('.trees').html(args.arg1);
+/*
+$(document).on("click",'div.trees input:checkbox:checked',function(){											
+// in case you are using a real popup window
+var node=top.tinyMCE.activeEditor.dom.select('p.rdmpara')
+top.tinyMCE.activeEditor.selection.select(node[$(this).attr('attr-id')]);
+
+
+
+});*/
+$(document).ready(function(){
+	$(document).on("click",'div.trees input:checkbox:not(:checked)',function(){		
+		   			console.log($(this).attr('attr-id'));
+				
+					var html=top.tinyMCE.activeEditor.dom.select('div.hidepara');
+					var data='';
+					var nodetitle = new Array();
+					var nodedesc = new Array();
+					var oldhtmldata = new Array();
+					//alert(html.length);
+					
+					if(html.length == 0)
+					{
+						nodetitle=top.tinyMCE.activeEditor.dom.select('p.rdmpara');
+						top.tinyMCE.activeEditor.selection.select(nodetitle[$(this).attr('attr-id')]);
+						var contenttitle = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+						
+						top.tinyMCE.activeEditor.dom.remove(top.tinyMCE.activeEditor.selection.getNode());
+						
+						
+						nodedesc=top.tinyMCE.activeEditor.dom.select('p.rdmparadesc');
+						top.tinyMCE.activeEditor.selection.select(nodedesc[$(this).attr('attr-id')]);
+						var contentdesc = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+						//alert(contenttitle);alert(contentdesc);alert(contenttitle+contentdesc);return false;
+						data="<div class='hidepara' style='display:none' id='hidepara'>"+contenttitle+contentdesc+"</div>";
+						top.tinyMCE.activeEditor.selection.setContent(data);
+					}
+					else
+					{
+						node=top.tinyMCE.activeEditor.dom.select('p.rdmpara');
+						top.tinyMCE.activeEditor.selection.select(node[$(this).attr('attr-id')]);
+						var newcontenttitle = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+						
+						top.tinyMCE.activeEditor.dom.remove(top.tinyMCE.activeEditor.selection.getNode());
+						
+						node=top.tinyMCE.activeEditor.dom.select('p.rdmparadesc');
+						top.tinyMCE.activeEditor.selection.select(node[$(this).attr('attr-id')]);
+						var newcontentdesc = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+						
+						
+				
+						data="<div class='hidepara' style='display:none' id='hidepara'>"+newcontenttitle+newcontentdesc+"</div>";
+						top.tinyMCE.activeEditor.selection.setContent(data);
+					}
+    });
+	
+	$(document).on("click",'div.trees input:checkbox:checked',function(){		
+		   			console.log($(this).attr('attr-id'));
+					var nodetitle = new Array();
+					var nodedesc = new Array();
+				/*	var node = new Array();
+					node=top.tinyMCE.activeEditor.dom.select('div.hidepara');
+					top.tinyMCE.activeEditor.selection.select(node[$(this).attr('attr-id')]);
+				 	var newcontent = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+				
+					top.tinyMCE.activeEditor.dom.remove(top.tinyMCE.activeEditor.selection.getNode());
+					var oldcontent = top.tinyMCE.activeEditor.getContent();
+					var newcontentback = oldcontent+newcontent;
+					top.tinyMCE.activeEditor.selection.setContent(newcontent);*/
+					nodetitle=top.tinyMCE.activeEditor.dom.select('p.rdmpara');
+					top.tinyMCE.activeEditor.selection.select(nodetitle[$(this).attr('attr-id')]);
+					var newcontenttitle = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+					
+					top.tinyMCE.activeEditor.dom.remove(top.tinyMCE.activeEditor.selection.getNode());
+					
+					nodedesc=top.tinyMCE.activeEditor.dom.select('p.rdmparadesc');
+					top.tinyMCE.activeEditor.selection.select(nodedesc[$(this).attr('attr-id')]);
+					var newcontentdesc = top.tinyMCE.activeEditor.selection.getContent({ 'format' : 'html' });
+				
+					top.tinyMCE.activeEditor.dom.remove(top.tinyMCE.activeEditor.dom.getParent( top.tinyMCE.activeEditor.selection.getNode(), 'div'));
+					var oldcontent = top.tinyMCE.activeEditor.getContent();
+					var newcontentback = oldcontent+newcontenttitle;
+					
+					/*	nodetitle=top.tinyMCE.activeEditor.dom.select('p.rdmpara');
+					top.tinyMCE.activeEditor.selection.select(nodetitle[$(this).attr('attr-id')]);*/
+					top.tinyMCE.activeEditor.selection.setContent(newcontenttitle+newcontentdesc);
+					//alert(newcontenttitle+newcontentdesc);return false;
+					
+    });
+});
+</script>
